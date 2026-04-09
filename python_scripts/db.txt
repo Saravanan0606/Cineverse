@@ -1,0 +1,51 @@
+for f in /movie_details/*.csv; do
+  echo "📥 Importing $f"
+  psql -U postgres -d movies_db -c "\copy movies FROM '$f' DELIMITER ',' CSV HEADER";
+done
+
+
+CREATE TABLE movies (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    original_title TEXT,
+    overview TEXT,
+    tagline TEXT,
+    status TEXT,
+
+    adult BOOLEAN,
+    video BOOLEAN,
+
+    release_date DATE,
+    runtime INTEGER,
+
+    budget BIGINT,
+    revenue BIGINT,
+    popularity FLOAT,
+
+    vote_average FLOAT,
+    vote_count INTEGER,
+
+    original_language TEXT,
+    homepage TEXT,
+    imdb_id TEXT,
+
+    poster_path TEXT,
+    backdrop_path TEXT,
+
+    genres JSONB,
+    production_companies JSONB,
+    production_countries JSONB,
+    spoken_languages JSONB,
+    origin_country JSONB,
+    belongs_to_collection JSONB
+);
+
+
+
+UPDATE movies SET
+  genres = genres::jsonb,
+  production_companies = production_companies::jsonb,
+  production_countries = production_countries::jsonb,
+  spoken_languages = spoken_languages::jsonb,
+  origin_country = origin_country::jsonb,
+  belongs_to_collection = belongs_to_collection::jsonb;

@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #141414;
+  color: white;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbar for horizontal scroll rows */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Banner gradient fades */
+.banner-fade-bottom {
+  height: 14.7rem;
+  background-image: linear-gradient(
+    180deg,
+    transparent,
+    rgba(20, 20, 20, 0.61),
+    #141414
+  );
+}
+
+.banner-fade-top {
+  height: 4rem;
+  background-image: linear-gradient(
+    0deg,
+    transparent,
+    rgba(20, 20, 20, 0.5),
+    rgba(20, 20, 20, 0.8)
+  );
+}
