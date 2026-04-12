@@ -12,74 +12,83 @@ function Navbar({ query, onSearch }: Props) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-12 h-16 transition-all duration-500 ${
-        scrolled ? "bg-[#141414] shadow-lg" : "bg-gradient-to-b from-black/80 via-black/40 to-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-20 transition-all duration-300 ${
+        scrolled ? "glass-nav" : "bg-transparent"
       }`}
     >
       {/* Left side */}
-      <div className="flex items-center gap-6 lg:gap-10">
-        <h1
-          className="text-[#e50914] text-xl md:text-2xl font-extrabold cursor-pointer tracking-wider select-none"
+      <div className="flex items-center gap-8 lg:gap-12">
+        <div 
+          className="flex items-center gap-2 cursor-pointer group"
           onClick={() => { onSearch(""); navigate("/"); }}
         >
-          CINEVERSE
-        </h1>
+          <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold tracking-wide">
+            Cine<span className="text-gradient">Verse</span>
+          </h1>
+        </div>
 
-        <div className="hidden md:flex items-center gap-5 text-[14px] text-gray-300">
-          <span className="text-white font-medium cursor-pointer hover:text-gray-300 transition">Home</span>
-          <span className="cursor-pointer hover:text-white transition">TV Shows</span>
-          <span className="cursor-pointer hover:text-white transition">Movies</span>
-          <span className="cursor-pointer hover:text-white transition">New & Popular</span>
-          <span className="cursor-pointer hover:text-white transition">My List</span>
+        <div className="hidden md:flex items-center gap-8 text-[15px] font-medium text-slate-300">
+          <span className="text-white relative after:absolute after:bottom-[-24px] after:left-0 after:h-[2px] after:w-full after:bg-blue-500 cursor-pointer">Home</span>
+          <span className="cursor-pointer hover:text-white transition-colors">Discover</span>
+          <span className="cursor-pointer hover:text-white transition-colors">Movies</span>
+          <span className="cursor-pointer hover:text-white transition-colors">Series</span>
         </div>
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-4">
-        {/* Search box */}
+      <div className="flex items-center gap-6">
+        {/* Modern Search */}
         <div
-          className={`flex items-center transition-all duration-300 overflow-hidden ${
-            searchOpen
-              ? "w-52 md:w-64 bg-black/90 border border-white px-2"
-              : "w-auto bg-transparent border-none"
+          className={`flex items-center transition-all duration-300 overflow-hidden rounded-full ${
+            searchOpen || query
+              ? "w-64 bg-white/5 border border-white/10 px-4 h-10"
+              : "w-10 h-10 bg-white/5 hover:bg-white/10 border border-transparent justify-center cursor-pointer"
           }`}
+          onClick={() => !searchOpen && setSearchOpen(true)}
         >
-          <button
-            onClick={() => setSearchOpen(!searchOpen)}
-            className="text-white p-1 shrink-0"
-          >
-            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-            </svg>
-          </button>
-          {searchOpen && (
+          <svg className={`w-5 h-5 ${searchOpen || query ? "text-blue-400" : "text-white"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+          </svg>
+          
+          {(searchOpen || query) && (
             <input
-              autoFocus
-              className="bg-transparent text-white text-sm placeholder-gray-400 outline-none py-1.5 w-full ml-1"
-              placeholder="Titles, people, genres"
+              autoFocus={searchOpen}
+              className="bg-transparent text-white text-sm placeholder-slate-400 outline-none w-full ml-3"
+              placeholder="Search movies..."
               value={query}
               onChange={(e) => onSearch(e.target.value)}
+              onBlur={() => !query && setSearchOpen(false)}
             />
           )}
         </div>
 
-        <svg className="w-5 h-5 cursor-pointer text-white hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
+        <button className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 transition-colors relative">
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+          <span className="absolute top-2 right-2 w-2 h-2 bg-purple-500 rounded-full"></span>
+        </button>
 
-        {/* Avatar */}
-        <img
-          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-          alt="avatar"
-          className="w-8 h-8 rounded cursor-pointer"
-        />
+        {/* Profile */}
+        <div className="w-10 h-10 rounded-full bg-gradient-primary p-[2px] cursor-pointer hover:scale-105 transition-transform">
+           <img
+             src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4"
+             alt="avatar"
+             className="w-full h-full rounded-full object-cover bg-[#0B0F19]"
+           />
+        </div>
       </div>
     </nav>
   );

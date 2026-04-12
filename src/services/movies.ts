@@ -28,11 +28,12 @@ export const searchMovies = async (query: string) => {
 
 export const getMovieDetails = async (id: string) => {
   // Fetch all movie data in parallel
-  const [details, credits, videos, similar] = await Promise.all([
+  const [details, credits, videos, similar, watchProviders] = await Promise.all([
     tmdb.get(`/movie/${id}`),
     tmdb.get(`/movie/${id}/credits`),
     tmdb.get(`/movie/${id}/videos`),
     tmdb.get(`/movie/${id}/similar`),
+    tmdb.get(`/movie/${id}/watch/providers`),
   ]);
 
   return {
@@ -40,5 +41,6 @@ export const getMovieDetails = async (id: string) => {
     credits: credits.data,
     videos: videos.data.results,
     similar: similar.data.results,
+    watchProviders: watchProviders.data.results,
   };
 };

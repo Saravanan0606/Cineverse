@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+python_scripts/movie_details/*
+python_scripts/watch_providers/*
+
+python_scripts/watch_provider_progress/*

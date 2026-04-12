@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 * {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Outfit', sans-serif;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -14,14 +16,29 @@ html {
 }
 
 body {
-  background-color: #141414;
-  color: white;
+  background-color: #0B0F19; /* Deep midnight blue */
+  color: #E2E8F0;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide scrollbar for horizontal scroll rows */
+/* Unique scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F19;
+}
+::-webkit-scrollbar-thumb {
+  background: #3B82F6; /* Modern blue */
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #60A5FA;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -30,23 +47,49 @@ body {
   scrollbar-width: none;
 }
 
-/* Banner gradient fades */
-.banner-fade-bottom {
-  height: 14.7rem;
-  background-image: linear-gradient(
-    180deg,
-    transparent,
-    rgba(20, 20, 20, 0.61),
-    #141414
-  );
+/* Glassmorphism utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.banner-fade-top {
-  height: 4rem;
-  background-image: linear-gradient(
-    0deg,
-    transparent,
-    rgba(20, 20, 20, 0.5),
-    rgba(20, 20, 20, 0.8)
-  );
+.glass-nav {
+  background: rgba(11, 15, 25, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gradients */
+.text-gradient {
+  background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+}
+
+.bg-gradient-primary:hover {
+  background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 100%);
+}
+
+/* Hero fading effects */
+.hero-gradient {
+  background: radial-gradient(circle at center, transparent 0%, #0B0F19 100%),
+              linear-gradient(to bottom, transparent 60%, #0B0F19 100%);
+}
+
+/* Card hover glow */
+.card-glow {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-glow:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px -15px rgba(139, 92, 246, 0.3);
+  border-color: rgba(139, 92, 246, 0.5);
 }
