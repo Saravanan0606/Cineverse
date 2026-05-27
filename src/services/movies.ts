@@ -44,3 +44,7 @@ export const getMovieDetails = async (id: string) => {
     watchProviders: watchProviders.data.results,
   };
 };
+
+export const getTrendingMovies = async (): Promise<any[]> => {
+  return fetchMoviesData(requests.fetchTrending);
+};

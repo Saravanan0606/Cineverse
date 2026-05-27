@@ -23,7 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
-python_scripts/movie_details/*
-python_scripts/watch_providers/*
+# CineVerse local database and scrapers data
+backend/data/*.csv
+backend/data/movie_details/chunk_*
+backend/data/watch_provider_progress/chunk_*
+backend/database/*.sql
+python_scripts/
 
-python_scripts/watch_provider_progress/*
+backend/data

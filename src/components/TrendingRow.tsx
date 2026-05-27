@@ -56,7 +56,7 @@ function TrendingRow() {
                 style={{ scrollSnapAlign: "start" }}
               />
             ))
-          : data?.map((movie: any, i: number) => (
+          : (data as any[])?.map((movie: any, i: number) => (
               <div
                 key={movie.id}
                 onClick={() => navigate(`/movie/${movie.id}`)}

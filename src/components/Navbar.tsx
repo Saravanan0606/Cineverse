@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 type Props = {
   query: string;
@@ -10,6 +10,8 @@ function Navbar({ query, onSearch }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -39,11 +41,37 @@ function Navbar({ query, onSearch }: Props) {
           </h1>
         </div>
 
-        <div className="hidden md:flex items-center gap-8 text-[15px] font-medium text-slate-300">
-          <span className="text-white relative after:absolute after:bottom-[-24px] after:left-0 after:h-[2px] after:w-full after:bg-blue-500 cursor-pointer">Home</span>
-          <span className="cursor-pointer hover:text-white transition-colors">Discover</span>
-          <span className="cursor-pointer hover:text-white transition-colors">Movies</span>
-          <span className="cursor-pointer hover:text-white transition-colors">Series</span>
+        <div className="hidden md:flex items-center gap-8 text-[15px] font-medium">
+          <span 
+            className={`cursor-pointer transition-colors ${currentPath === '/' ? 'text-white relative after:absolute after:bottom-[-24px] after:left-0 after:h-[2px] after:w-full after:bg-blue-500' : 'text-slate-300 hover:text-white'}`} 
+            onClick={() => navigate('/')}
+          >
+            Home
+          </span>
+          <span 
+            className={`cursor-pointer transition-colors ${currentPath === '/discover' ? 'text-white relative after:absolute after:bottom-[-24px] after:left-0 after:h-[2px] after:w-full after:bg-blue-500' : 'text-slate-300 hover:text-white'}`} 
+            onClick={() => navigate('/discover')}
+          >
+            Discover
+          </span>
+          <span 
+            className={`cursor-pointer transition-colors ${currentPath === '/movies' ? 'text-white relative after:absolute after:bottom-[-24px] after:left-0 after:h-[2px] after:w-full after:bg-blue-500' : 'text-slate-300 hover:text-white'}`} 
+            onClick={() => navigate('/movies')}
+          >
+            Movies
+          </span>
+          <span 
+            className={`cursor-pointer transition-colors ${currentPath === '/series' ? 'text-white relative after:absolute after:bottom-[-24px] after:left-0 after:h-[2px] after:w-full after:bg-blue-500' : 'text-slate-300 hover:text-white'}`} 
+            onClick={() => navigate('/series')}
+          >
+            Series
+          </span>
+          <span 
+            className={`cursor-pointer transition-colors ${currentPath === '/watchlist' ? 'text-white relative after:absolute after:bottom-[-24px] after:left-0 after:h-[2px] after:w-full after:bg-blue-500' : 'text-slate-300 hover:text-white'}`} 
+            onClick={() => navigate('/watchlist')}
+          >
+            Watchlist
+          </span>
         </div>
       </div>
 
@@ -82,7 +110,10 @@ function Navbar({ query, onSearch }: Props) {
         </button>
 
         {/* Profile */}
-        <div className="w-10 h-10 rounded-full bg-gradient-primary p-[2px] cursor-pointer hover:scale-105 transition-transform">
+        <div 
+          onClick={() => navigate('/profile')}
+          className="w-10 h-10 rounded-full bg-gradient-primary p-[2px] cursor-pointer hover:scale-105 transition-transform"
+        >
            <img
              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4"
              alt="avatar"

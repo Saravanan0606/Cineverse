@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMovieDetails } from "../hooks/useMovieDetails";
 
@@ -30,6 +30,40 @@ function MovieDetails() {
   const navigate = useNavigate();
   const { data: movie, isLoading, isError } = useMovieDetails(id!);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+
+  useEffect(() => {
+    if (!movie) return;
+    const stored = localStorage.getItem("cineverse_watchlist");
+    if (stored) {
+      const watchlist = JSON.parse(stored);
+      setIsInWatchlist(watchlist.some((m: any) => m.id === movie.id));
+    }
+  }, [movie]);
+
+  const toggleWatchlist = () => {
+    if (!movie) return;
+    const stored = localStorage.getItem("cineverse_watchlist");
+    let watchlist = stored ? JSON.parse(stored) : [];
+    
+    if (isInWatchlist) {
+      watchlist = watchlist.filter((m: any) => m.id !== movie.id);
+      setIsInWatchlist(false);
+    } else {
+      const watchlistItem = {
+        id: movie.id,
+        title: movie.title || movie.name,
+        poster_path: movie.poster_path,
+        vote_average: movie.vote_average,
+        backdrop_path: movie.backdrop_path,
+        release_date: movie.release_date,
+        genres: movie.genres
+      };
+      watchlist.push(watchlistItem);
+      setIsInWatchlist(true);
+    }
+    localStorage.setItem("cineverse_watchlist", JSON.stringify(watchlist));
+  };
 
   /* ── Loading ── */
   if (isLoading) {
@@ -162,8 +196,24 @@ function MovieDetails() {
                   Watch Trailer
                 </button>
               )}
-              <button className="flex items-center justify-center w-14 h-14 rounded-xl glass-panel hover:bg-white/10 hover:scale-105 transition-all">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+              <button 
+                onClick={toggleWatchlist}
+                className={`flex items-center justify-center w-14 h-14 rounded-xl transition-all duration-300 ${
+                  isInWatchlist 
+                    ? "bg-blue-500/20 text-blue-400 border border-blue-500/40 hover:bg-blue-500/30 hover:scale-105" 
+                    : "glass-panel text-white hover:bg-white/10 hover:scale-105"
+                }`}
+                title={isInWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
+              >
+                {isInWatchlist ? (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                )}
               </button>
               <button className="flex items-center justify-center w-14 h-14 rounded-xl glass-panel hover:bg-white/10 hover:scale-105 transition-all">
                 <svg className="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>

@@ -38,7 +38,12 @@ function Profile() {
                  <p className="text-slate-400 mt-1 text-sm">{user.email}</p>
                  <div className="mt-8 pt-6 w-full border-t border-white/10 space-y-3">
                      <button className="w-full text-left px-4 py-2 text-blue-400 font-medium rounded-lg bg-blue-500/10">Edit Profile</button>
-                     <button className="w-full text-left px-4 py-2 text-slate-300 font-medium rounded-lg hover:bg-white/5 transition">My Watchlist</button>
+                     <button 
+                        className="w-full text-left px-4 py-2 text-slate-300 font-medium rounded-lg hover:bg-white/5 transition"
+                        onClick={() => navigate('/watchlist')}
+                      >
+                        My Watchlist
+                      </button>
                      <button className="w-full text-left px-4 py-2 text-slate-300 font-medium rounded-lg hover:bg-white/5 transition">Preferences</button>
                      <button className="w-full text-left px-4 py-2 text-slate-300 font-medium rounded-lg hover:bg-white/5 transition">Subscription</button>
                      <button 
