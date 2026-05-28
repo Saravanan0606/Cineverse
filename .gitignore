@@ -31,3 +31,7 @@ backend/database/*.sql
 python_scripts/
 
 backend/data
+
+# Python virtual environment
+.venv/
+venv/

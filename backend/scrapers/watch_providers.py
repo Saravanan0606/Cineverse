@@ -5,6 +5,12 @@ from psycopg2.extras import execute_batch
 from tqdm import tqdm
 import os
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 # ================= CONFIG =================
 API_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhMTVmODk3NThmNDYwMGNhYWNiYTRiYmYwM2RmZGZlNyIsIm5iZiI6MTc3NTU0OTI4My4zMDcwMDAyLCJzdWIiOiI2OWQ0YmI2MzNmYmEzNTE1NjkwNzE0YWMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.CJM56DpgqmHARbPALNX-gler3ZtCgOHPGW0fBM-jQoc"
 
@@ -13,13 +19,7 @@ HEADERS = {
     "accept": "application/json"
 }
 
-DB_CONFIG = {
-    "host": "localhost",
-    "port": 5432,
-    "database": "movies_db",
-    "user": "postgres",
-    "password": "postgres"
-}
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:Admin123@127.0.0.1:5432/movies_db")
 
 CONCURRENCY = 50
 BATCH_SIZE = 1000
@@ -181,7 +181,7 @@ async def process_chunk(conn, chunk, chunk_idx):
 # ================= MAIN =================
 async def main():
     print("🔌 Connecting to DB...")
-    conn = psycopg2.connect(**DB_CONFIG)
+    conn = psycopg2.connect(DATABASE_URL)
 
     print("📦 Creating table...")
     create_table(conn)

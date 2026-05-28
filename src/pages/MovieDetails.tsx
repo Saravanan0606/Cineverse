@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMovieDetails } from "../hooks/useMovieDetails";
+import api from "../utils/api";
 
 const IMG_ORIGINAL = "https://image.tmdb.org/t/p/original";
 const IMG_W500 = "https://image.tmdb.org/t/p/w500";
@@ -34,35 +35,42 @@ function MovieDetails() {
 
   useEffect(() => {
     if (!movie) return;
-    const stored = localStorage.getItem("cineverse_watchlist");
-    if (stored) {
-      const watchlist = JSON.parse(stored);
-      setIsInWatchlist(watchlist.some((m: any) => m.id === movie.id));
-    }
+    
+    const checkWatchlist = async () => {
+      const token = localStorage.getItem("cineverse_token");
+      if (!token) return;
+      try {
+        const response = await api.get(`/watchlist/check/${movie.id}`);
+        setIsInWatchlist(response.data.in_watchlist);
+      } catch (err) {
+        console.error("Error checking watchlist status", err);
+      }
+    };
+
+    checkWatchlist();
   }, [movie]);
 
-  const toggleWatchlist = () => {
+  const toggleWatchlist = async () => {
     if (!movie) return;
-    const stored = localStorage.getItem("cineverse_watchlist");
-    let watchlist = stored ? JSON.parse(stored) : [];
     
-    if (isInWatchlist) {
-      watchlist = watchlist.filter((m: any) => m.id !== movie.id);
-      setIsInWatchlist(false);
-    } else {
-      const watchlistItem = {
-        id: movie.id,
-        title: movie.title || movie.name,
-        poster_path: movie.poster_path,
-        vote_average: movie.vote_average,
-        backdrop_path: movie.backdrop_path,
-        release_date: movie.release_date,
-        genres: movie.genres
-      };
-      watchlist.push(watchlistItem);
-      setIsInWatchlist(true);
+    const token = localStorage.getItem("cineverse_token");
+    if (!token) {
+      navigate("/login");
+      return;
     }
-    localStorage.setItem("cineverse_watchlist", JSON.stringify(watchlist));
+
+    try {
+      if (isInWatchlist) {
+        await api.post("/watchlist/remove", { movie_id: movie.id });
+        setIsInWatchlist(false);
+      } else {
+        await api.post("/watchlist/add", { movie_id: movie.id });
+        setIsInWatchlist(true);
+      }
+    } catch (err) {
+      console.error("Error toggling watchlist", err);
+      alert("Failed to update watchlist. Please try again.");
+    }
   };
 
   /* ── Loading ── */

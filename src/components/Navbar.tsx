@@ -13,6 +13,19 @@ function Navbar({ query, onSearch }: Props) {
   const location = useLocation();
   const currentPath = location.pathname;
 
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("cineverse_user");
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -109,17 +122,27 @@ function Navbar({ query, onSearch }: Props) {
           <span className="absolute top-2 right-2 w-2 h-2 bg-purple-500 rounded-full"></span>
         </button>
 
-        {/* Profile */}
-        <div 
-          onClick={() => navigate('/profile')}
-          className="w-10 h-10 rounded-full bg-gradient-primary p-[2px] cursor-pointer hover:scale-105 transition-transform"
-        >
-           <img
-             src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=b6e3f4"
-             alt="avatar"
-             className="w-full h-full rounded-full object-cover bg-[#0B0F19]"
-           />
-        </div>
+        {/* Profile / Login */}
+        {user ? (
+          <div 
+            onClick={() => navigate('/profile')}
+            className="w-10 h-10 rounded-full bg-gradient-primary p-[2px] cursor-pointer hover:scale-105 transition-transform"
+            title={`Logged in as ${user.username}`}
+          >
+             <img
+               src={user.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.username}&backgroundColor=b6e3f4`}
+               alt="avatar"
+               className="w-full h-full rounded-full object-cover bg-[#0B0F19]"
+             />
+          </div>
+        ) : (
+          <button
+            onClick={() => navigate('/login')}
+            className="bg-gradient-primary text-white text-sm font-bold px-5 py-2 rounded-xl hover:scale-105 transition-all shadow-md"
+          >
+            Sign In
+          </button>
+        )}
       </div>
     </nav>
   );
